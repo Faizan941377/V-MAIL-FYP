@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Compose.ComposeActivity">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/color_orange">
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_compose_pleaseRecodeMassage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/et_compose_senderEmail"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="26dp"
+        android:background="@drawable/edit_text_style"
+        android:text="Tell me the Email Address to be send the voice mail"
+        android:inputType="textEmailAddress"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_orange"
+        android:textSize="12sp" />
+
+
+    <EditText
+        android:id="@+id/et_compose_subject"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="26dp"
+        android:background="@drawable/edit_text_style"
+        android:text="Enter Your Subject"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_orange"
+        android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>
