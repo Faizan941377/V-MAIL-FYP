@@ -254,11 +254,18 @@
 
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/iv_dashboard_speak"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:layout_gravity="center"
-        android:background="@drawable/ico_speak" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/iv_dashboard_speak"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20sp"
+            android:background="@drawable/ico_speak" />
+
+    </RelativeLayout>
 </LinearLayout>
