@@ -170,14 +170,14 @@ public class ComposeActivity extends AppCompatActivity {
 
     private void confirmationEmail() {
 
-        String sendingMailQuestion = "If you want to sent this mail say Yes";
+        String sendingMailQuestion = "If you want sent mail say yes or don't want to send say no";
         textToSpeech.speak(sendingMailQuestion, TextToSpeech.QUEUE_ADD, null);
 
 
         Handler handler1 = new Handler();
         handler1.postDelayed(() -> {
            openMic3();
-        }, 10000);
+        }, 12000);
 
     }
 

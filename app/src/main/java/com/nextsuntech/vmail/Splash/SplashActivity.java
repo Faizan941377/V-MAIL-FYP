@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.nextsuntech.vmail.Dashboard.DashboardActivity;
 import com.nextsuntech.vmail.R;
 import com.nextsuntech.vmail.User.LoginActivity;
+import com.nextsuntech.vmail.User.RegistrationActivity;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
         handler = new Handler();
         handler.postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
+            Intent intent = new Intent(SplashActivity.this, com.codebeginner.sovary.fingerprinttest.MainActivity.class);
             startActivity(intent);
             finish();
         }, 2000);

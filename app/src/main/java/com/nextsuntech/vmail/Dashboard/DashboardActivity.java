@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.nextsuntech.vmail.Inbox.InboxActivity;
 import com.nextsuntech.vmail.Profile.ProfileActivity;
 import com.nextsuntech.vmail.R;
 import com.nextsuntech.vmail.Sent.SentActivity;
+import com.nextsuntech.vmail.Splash.SplashActivity;
 import com.nextsuntech.vmail.User.LoginActivity;
 
 import java.util.ArrayList;
@@ -50,13 +52,18 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
             if (i != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(Locale.UK);
+                String help = "Welcome to V mail app tell me how can I help You";
+                textToSpeech.speak(help,TextToSpeech.QUEUE_ADD,null);
             }
         });
 
         speakIV.setOnClickListener(this);
 
 
-        openMic();
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            openMic();
+        }, 5000);
     }
 
     private void openMic() {
@@ -118,6 +125,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 }
                 if (speechTextTV.getText().toString().equals("profile")){
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    finish();
                 }
                 break;
 
