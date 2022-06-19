@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int REQUEST_CODE = 1001;
     EditText emailET;
     EditText passwordET;
-    TextView signUpET;
+    TextView signUpTV;
     RelativeLayout loginBT;
     ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
@@ -59,12 +59,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         emailET = findViewById(R.id.et_login_email);
         passwordET = findViewById(R.id.et_login_password);
-        signUpET = findViewById(R.id.tv_login_signUp);
+        signUpTV = findViewById(R.id.tv_login_signUp);
         loginBT = findViewById(R.id.bt_login);
 
         progressDialog = new ProgressDialog(this);
 
         loginBT.setOnClickListener(this);
+        signUpTV.setOnClickListener(this);
 
     }
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "422640059797",
+    "project_id": "v-mail-5a615",
+    "storage_bucket": "v-mail-5a615.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422640059797:android:d266a36801e8ce17b6a29c",
+        "android_client_info": {
+          "package_name": "com.nextsuntech.vmail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422640059797-62p6fhffdv7ap3de7puajohoh82nm008.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8dBmiFuKj8_4ipE8-b1LIoeFGVjRKQZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422640059797-62p6fhffdv7ap3de7puajohoh82nm008.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

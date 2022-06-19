@@ -60,6 +60,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         registerBT.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
 
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            //if user is already login then goto dashboard activity
+            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            finish();
+        }
+
         //authentication initialized
 
         mAuth = FirebaseAuth.getInstance();

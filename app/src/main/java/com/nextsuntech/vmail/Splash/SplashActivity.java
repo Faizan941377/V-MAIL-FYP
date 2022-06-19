@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
         handler = new Handler();
         handler.postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, com.codebeginner.sovary.fingerprinttest.MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, RegistrationActivity.class);
             startActivity(intent);
             finish();
         }, 2000);
