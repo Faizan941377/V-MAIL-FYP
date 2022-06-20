@@ -101,6 +101,7 @@
                     android:layout_marginLeft="26dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="26dp"
+                    android:maxLength="11"
                     android:background="@drawable/edit_text_style"
                     android:hint="Enter your Phone No"
                     android:inputType="phone"
@@ -127,6 +128,7 @@
                     android:layout_marginRight="26dp"
                     android:background="@drawable/edit_text_style"
                     android:hint="Password"
+                    android:maxLength="6"
                     android:inputType="phone"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
@@ -145,6 +147,7 @@
                     android:text="Login">
 
                     <TextView
+                        android:id="@+id/tv_yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"

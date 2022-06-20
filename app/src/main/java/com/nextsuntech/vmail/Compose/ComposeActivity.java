@@ -2,6 +2,7 @@ package com.nextsuntech.vmail.Compose;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 
 import android.annotation.SuppressLint;
@@ -19,7 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nextsuntech.vmail.AppDatabase;
 import com.nextsuntech.vmail.R;
+import com.nextsuntech.vmail.SendMailData;
+import com.nextsuntech.vmail.SentMailData;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -63,7 +67,6 @@ public class ComposeActivity extends AppCompatActivity {
         textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
             if (i != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(Locale.UK);
-
                 textToSpeech.speak(composeTV.getText().toString(), TextToSpeech.QUEUE_ADD, null);
             }
             senderEmailSpeaking();
@@ -74,9 +77,8 @@ public class ComposeActivity extends AppCompatActivity {
         textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
             if (i != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(Locale.UK);
-                senderEmailET.setText("tell me the mail address to be we want to send mail");
-                textToSpeech.speak(senderEmailET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
-                senderEmailET.setText("");
+                String email = "tell me the mail address to be we want to send mail";
+                textToSpeech.speak(email, TextToSpeech.QUEUE_ADD, null);
             }
         });
 
@@ -129,13 +131,13 @@ public class ComposeActivity extends AppCompatActivity {
                 ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 speechText.setText(result2.get(0));
             }
-            if (speechText.getText().toString().equals("yes"))
-            {
+            if (speechText.getText().toString().equals("yes")) {
                 sendMail();
+                new bgThread().start();
             }
-            if (speechText.getText().toString().equals("no")){
+            if (speechText.getText().toString().equals("no")) {
                 String weClearActivity = "we clear all provided information please record your voice mail again";
-                textToSpeech.speak(weClearActivity,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(weClearActivity, TextToSpeech.QUEUE_ADD, null);
                 senderEmailET.setText("");
                 subjectET.setText("");
                 messageET.setText("");
@@ -162,7 +164,7 @@ public class ComposeActivity extends AppCompatActivity {
             textToSpeech.speak(messageET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         }, 2000);
 
-       Handler handler1 = new Handler();
+        Handler handler1 = new Handler();
         handler1.postDelayed(() -> {
             confirmationEmail();
         }, 8000);
@@ -176,7 +178,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         Handler handler1 = new Handler();
         handler1.postDelayed(() -> {
-           openMic3();
+            openMic3();
         }, 12000);
 
     }
@@ -305,6 +307,21 @@ public class ComposeActivity extends AppCompatActivity {
                 textToSpeech.speak(mailNotSend, TextToSpeech.QUEUE_ADD, null);
                 Toast.makeText(ComposeActivity.this, mailNotSend, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    class bgThread extends Thread {
+
+        public void run(){
+            super.run();
+            AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                    AppDatabase.class, "v_mailDatabase").allowMainThreadQueries().build();
+            SendMailData sendMailData = db.sendMailData();
+            sendMailData.insertrecode(new SentMailData(0,senderEmailET.getText().toString()
+            ,subjectET.getText().toString(),messageET.getText().toString()));
+            senderEmailET.setText("");
+            subjectET.setText("");
+            messageET.setText("");
         }
     }
 }

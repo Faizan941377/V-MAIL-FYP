@@ -20,7 +20,7 @@
         android:layout_marginBottom="36sp"
         android:text="V-MAIL"
         android:textColor="@color/color_orange"
-        android:textStyle="bold"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
