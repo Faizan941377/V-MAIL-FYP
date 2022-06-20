@@ -30,7 +30,7 @@ import java.util.Locale;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String FILE_NAME = "SavedUserData" ;
+    private static final String FILE_NAME = "SavedUserData";
     TextView loginBT;
     EditText nameET;
     EditText emailET;
