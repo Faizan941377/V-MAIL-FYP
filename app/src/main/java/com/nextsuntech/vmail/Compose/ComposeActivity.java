@@ -1,5 +1,6 @@
 package com.nextsuntech.vmail.Compose;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -15,54 +16,60 @@ import android.os.Handler;
 
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nextsuntech.vmail.AppDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.nextsuntech.vmail.Dashboard.DashboardActivity;
+import com.nextsuntech.vmail.Email;
 import com.nextsuntech.vmail.R;
-import com.nextsuntech.vmail.SendMailData;
-import com.nextsuntech.vmail.SentMailData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
-import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
-public class ComposeActivity extends AppCompatActivity {
+
+public class ComposeActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView composeTV;
     EditText senderEmailET;
     EditText subjectET;
     EditText messageET;
     TextView speechText;
+    ImageView backIV;
     TextToSpeech textToSpeech;
     RelativeLayout sendEmailBT;
-    String email, password;
+    String sender_email;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
+
+        sender_email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Toast.makeText(getApplicationContext(), sender_email, Toast.LENGTH_SHORT).show();
         composeTV = findViewById(R.id.tv_compose_pleaseRecodeMassage);
         senderEmailET = findViewById(R.id.et_compose_senderEmail);
         subjectET = findViewById(R.id.et_compose_subject);
         messageET = findViewById(R.id.et_compose_body);
         sendEmailBT = findViewById(R.id.bt_compose_sendMail);
         speechText = findViewById(R.id.tv_compose_speechText);
+        backIV = findViewById(R.id.iv_compose_back);
 
-        email = "h7006582@gmail.com";
-        password = "hhnhbrtuwoogznuy";
 
         textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
             if (i != TextToSpeech.ERROR) {
@@ -85,7 +92,7 @@ public class ComposeActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(this::openMic, 5000);
 
-
+        backIV.setOnClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -133,7 +140,6 @@ public class ComposeActivity extends AppCompatActivity {
             }
             if (speechText.getText().toString().equals("yes")) {
                 sendMail();
-                new bgThread().start();
             }
             if (speechText.getText().toString().equals("no")) {
                 String weClearActivity = "we clear all provided information please record your voice mail again";
@@ -197,7 +203,7 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     private void sendMail() {
-        Properties properties = new Properties();
+        /*Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -226,8 +232,29 @@ public class ComposeActivity extends AppCompatActivity {
 
         } catch (MessagingException e) {
             e.printStackTrace();
-        }
+        }*/
+        String rec_emailid = senderEmailET.getText().toString();
+        String esubject = subjectET.getText().toString();
+        String message = messageET.getText().toString();
+        String time_to_email = Calendar.getInstance().getTime().toString();
+        Email email = new Email();
+        email.setSenderid(sender_email);
+        email.setRecid(rec_emailid);
+        email.setSubject(esubject);
+        email.setBody(message);
+        email.setTime(time_to_email);
+        ProgressDialog progressDialog = new ProgressDialog(ComposeActivity.this);
+        ref = FirebaseDatabase.getInstance().getReference();
+
+        ref.child("emails").push().setValue(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(getApplicationContext(), "Email has been sent", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
+
 
     private void openMic() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -266,6 +293,23 @@ public class ComposeActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_compose_back:
+                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
+        finish();
     }
 
     private class SendMail extends AsyncTask<Message, String, String> {
@@ -307,21 +351,6 @@ public class ComposeActivity extends AppCompatActivity {
                 textToSpeech.speak(mailNotSend, TextToSpeech.QUEUE_ADD, null);
                 Toast.makeText(ComposeActivity.this, mailNotSend, Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    class bgThread extends Thread {
-
-        public void run(){
-            super.run();
-            AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "v_mailDatabase").allowMainThreadQueries().build();
-            SendMailData sendMailData = db.sendMailData();
-            sendMailData.insertrecode(new SentMailData(0,senderEmailET.getText().toString()
-            ,subjectET.getText().toString(),messageET.getText().toString()));
-            senderEmailET.setText("");
-            subjectET.setText("");
-            messageET.setText("");
         }
     }
 }

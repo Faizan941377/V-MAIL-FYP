@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nextsuntech.vmail">
 
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name='android.requestLegacyExternalStorage="true"' />
+    <uses-permission android:name="android.requestLegacyExternalStorage=&quot;true&quot;" />
 
     <application
         android:allowBackup="true"
@@ -21,17 +20,25 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Profile.ProfileActivity"
+            android:name=".Sent.ReadSentMailsActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false" />
+        <activity
+            android:name=".ReadActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".Profile.ProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Sent.SentActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Inbox.InboxActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Compose.ComposeActivity"
             android:exported="false"

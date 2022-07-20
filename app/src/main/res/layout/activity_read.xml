@@ -3,12 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="5sp"
     android:background="@color/colorWhite"
-    tools:context=".Dashboard.DashboardActivity">
+    tools:context=".ReadActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/color_orange">
+
+        <TextView
+            android:id="@+id/screentitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Read Mail"
+            android:textColor="@color/colorWhite"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_readActivity_back"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:background="@drawable/ico_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"/>
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/ll_rowSent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20sp"
@@ -25,13 +48,14 @@
                 android:id="@+id/tv_row_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sender Email:"
+                android:layout_marginLeft="8dp"
+                android:text="From:"
                 android:textColor="@color/colorBlack"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_rowSent_email"
+                android:id="@+id/txttofrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -49,43 +73,17 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_profile_phone2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Receiver Email:"
-                android:textColor="@color/colorBlack"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_rowSent_receiverEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5sp"
-                android:layout_toRightOf="@+id/tv_profile_phone2"
-                android:text="Profile"
-                android:textColor="@color/colorBlack"
-                android:textSize="16dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
                 android:id="@+id/tv_profile_email1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="Subject:"
                 android:textColor="@color/colorBlack"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_rowSent_subject"
+                android:id="@+id/txtrsubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -108,11 +106,12 @@
                 android:layout_height="wrap_content"
                 android:text="Message:"
                 android:textColor="@color/colorBlack"
+                android:layout_marginLeft="8dp"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_rowSent_message"
+                android:id="@+id/txtrbody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -125,32 +124,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_profile_phone3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time:"
-                android:textColor="@color/colorBlack"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_rowSent_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5sp"
-                android:layout_toRightOf="@+id/tv_profile_phone3"
-                android:text="Profile"
-                android:textColor="@color/colorBlack"
-                android:textSize="16dp" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 </LinearLayout>

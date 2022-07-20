@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextsuntech.vmail.Dashboard.DashboardActivity;
 import com.nextsuntech.vmail.R;
 
@@ -48,6 +49,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     TextToSpeech textToSpeech;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
+    String token1;
 
     private FirebaseAuth mAuth;
 
@@ -137,54 +139,54 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 nameET.setText(result.get(0));
                 String email = "what is your email";
-                textToSpeech.speak(email,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(email, TextToSpeech.QUEUE_ADD, null);
                 Handler handler = new Handler();
                 handler.postDelayed(this::openMic2, 3000);
             }
         }
-        if (requestCode == 2){
-            if (resultCode == RESULT_OK && null != data){
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 emailET.setText(result1.get(0).replaceAll("\\s+", "") + "@gmail.com");
 
                 String phone = "what is your mobile number";
-                textToSpeech.speak(phone,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(phone, TextToSpeech.QUEUE_ADD, null);
                 Handler handler = new Handler();
                 handler.postDelayed(this::openMic3, 3000);
             }
         }
-        if (requestCode ==3){
-            if (resultCode == RESULT_OK && null !=data){
+        if (requestCode == 3) {
+            if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                phoneET.setText(result2.get(0).replaceAll("\\s+",""));
+                phoneET.setText(result2.get(0).replaceAll("\\s+", ""));
 
                 String password = "what is your password";
-                textToSpeech.speak(password,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(password, TextToSpeech.QUEUE_ADD, null);
                 Handler handler = new Handler();
                 handler.postDelayed(this::openMic4, 3000);
             }
         }
 
-        if (requestCode ==4){
-            if (resultCode == RESULT_OK && null !=data){
+        if (requestCode == 4) {
+            if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result3 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                passwordET.setText(result3.get(0).replaceAll("\\+",""));
+                passwordET.setText(result3.get(0).replaceAll("\\+", ""));
 
                 reviewDetails();
             }
         }
 
-        if (requestCode==5){
-            if (resultCode == RESULT_OK && null !=data){
+        if (requestCode == 5) {
+            if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result4 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 registerOptionTV.setText(result4.get(0));
             }
-            if (registerOptionTV.getText().toString().equals("yes")){
+            if (registerOptionTV.getText().toString().equals("yes")) {
                 registration();
             }
-            if (registerOptionTV.getText().toString().equals("no")){
+            if (registerOptionTV.getText().toString().equals("no")) {
                 String clearData = "we your clear all provided data please reopen the app";
-                textToSpeech.speak(clearData,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(clearData, TextToSpeech.QUEUE_ADD, null);
                 nameET.setText("");
                 emailET.setText("");
                 phoneET.setText("");
@@ -197,20 +199,20 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         String listenMessage = "Please confirm your provided details";
         textToSpeech.speak(listenMessage, TextToSpeech.QUEUE_ADD, null);
         String name = "your name is";
-        textToSpeech.speak(name,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(nameET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(name, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(nameET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         String email = "your email is";
-        textToSpeech.speak(email,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(emailET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(email, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(emailET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         String phone = "your phone number is";
-        textToSpeech.speak(phone,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(phoneET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(phone, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(phoneET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         String password = "Your password is";
-        textToSpeech.speak(password,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(passwordET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(password, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(passwordET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
 
         String askQues = "if you want to register then say yes or don't want to register say no";
-        textToSpeech.speak(askQues,TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(askQues, TextToSpeech.QUEUE_ADD, null);
 
         Handler handler = new Handler();
         handler.postDelayed(this::openMic5, 25000);
@@ -314,6 +316,18 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             progressDialog.setCancelable(false);
             progressDialog.setTitle("Registration");
 
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+                            token1 = task.getResult();
+                            System.out.println("TOKEN" + token1);
+                        }
+                    });
+
 
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -326,7 +340,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                                         , email
                                         , phone
                                         , password
+                                        , token1
                                 );
+
                                 FirebaseDatabase.getInstance().getReference("Users")
                                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         .setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {

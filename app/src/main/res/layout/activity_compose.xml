@@ -12,16 +12,25 @@
         android:layout_height="?actionBarSize"
         android:background="@color/color_orange">
 
+        <ImageView
+            android:id="@+id/iv_compose_back"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:background="@drawable/ico_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:padding="5sp"/>
+
         <TextView
             android:id="@+id/tv_compose_pleaseRecodeMassage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Welcome to Voice Email"
             android:layout_marginTop="10sp"
+            android:text="Welcome to Voice Email"
             android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

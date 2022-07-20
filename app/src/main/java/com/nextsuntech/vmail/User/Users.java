@@ -1,16 +1,17 @@
 package com.nextsuntech.vmail.User;
 
 public class Users {
-    public String name,email,phone,password;
+    public String name,email,phone,password,token;
 
     public Users(){
     }
 
-    public Users(String name, String email, String phone, String password) {
+    public Users(String name, String email, String phone, String password, String token) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.token = token;
     }
 
     public String getName() {
@@ -43,5 +44,13 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

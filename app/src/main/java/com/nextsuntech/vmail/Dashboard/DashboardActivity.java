@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
-
-
     CardView composeBT;
     CardView inboxBT;
     CardView sentBT;
@@ -53,17 +51,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             if (i != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(Locale.UK);
                 String help = "Welcome to V mail app tell me how can I help You";
-                textToSpeech.speak(help,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(help, TextToSpeech.QUEUE_ADD, null);
             }
         });
 
         speakIV.setOnClickListener(this);
 
-
         Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            openMic();
-        }, 5000);
+        handler.postDelayed(this::openMic, 5000);
     }
 
     private void openMic() {
@@ -79,20 +74,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-
-    private void openMic1() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hi Speak Something");
-
-        try {
-            startActivityForResult(intent, 2);
-        } catch (ActivityNotFoundException e) {
-             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,44 +82,68 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     speechTextTV.setText(result.get(0));
-                }
-                if (speechTextTV.getText().toString().equals("compose")){
-                    startActivity(new Intent(getApplicationContext(),ComposeActivity.class));
 
-                }else if (resultCode == RESULT_OK && null != data){
+                    if (speechTextTV.getText().toString().equals("compose")) {
+                        startActivity(new Intent(getApplicationContext(), ComposeActivity.class));
+                        finish();
+                        break;
+                    }
+                    if (speechTextTV.getText().toString().length() > 7) {
+                        openMic();
+                    }
+                }
+
+                if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     speechTextTV.setText(result1.get(0));
-                }
-                if (speechTextTV.getText().toString().equals("inbox")){
-                    startActivity(new Intent(getApplicationContext(), InboxActivity.class));
 
-                }else if (resultCode == RESULT_OK && null != data){
-                    ArrayList<String> result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    speechTextTV.setText(result1.get(0));
+                    if (speechTextTV.getText().toString().equals("inbox")) {
+                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        finish();
+                        break;
+                    }
+                    if (speechTextTV.getText().toString().length() != 5) {
+                        openMic();
+                    }
                 }
-                if (speechTextTV.getText().toString().equals("send")){
-                    startActivity(new Intent(getApplicationContext(), SentActivity.class));
 
-                }else if (resultCode == RESULT_OK && null != data){
-                    ArrayList<String> result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    speechTextTV.setText(result1.get(0));
+                if (resultCode == RESULT_OK && null != data) {
+                    ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    speechTextTV.setText(result2.get(0));
+
+                    if (speechTextTV.getText().toString().equals("profile")) {
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        finish();
+                        break;
+                    }
+                    if (speechTextTV.getText().toString().length() != 7) {
+                        openMic();
+                    }
                 }
-                if (speechTextTV.getText().toString().equals("profile")){
-                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    finish();
+
+                if (resultCode == RESULT_OK && null != data) {
+                    ArrayList<String> result3 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    speechTextTV.setText(result3.get(0));
+
+                    if (speechTextTV.getText().toString().equals("send")) {
+                        startActivity(new Intent(getApplicationContext(), SentActivity.class));
+                        finish();
+                        break;
+                    }
+                    if (speechTextTV.getText().toString().length() != 4) {
+                        openMic();
+                    }
                 }
-                break;
-
-
         }
     }
 
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.iv_dashboard_speak:
-            openMic();
-            break;
+                openMic();
+                break;
         }
     }
 }

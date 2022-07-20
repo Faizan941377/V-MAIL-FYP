@@ -31,6 +31,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nextsuntech.vmail.Dashboard.DashboardActivity;
 import com.nextsuntech.vmail.R;
 
@@ -47,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView signUpTV;
     TextView loginByVoice;
     ImageView loginWithVoiceIV;
+    ImageView loginWithBiometric;
     TextToSpeech textToSpeech;
     RelativeLayout loginBT;
     ProgressDialog progressDialog;
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             //if user is already login then goto dashboard activity
@@ -75,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBT = findViewById(R.id.bt_login);
         loginWithVoiceIV = findViewById(R.id.voice_login);
         loginByVoice = findViewById(R.id.tv_user_loginVoice);
+        loginWithBiometric = findViewById(R.id.biometric_login);
 
 
         progressDialog = new ProgressDialog(this);
@@ -82,9 +88,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBT.setOnClickListener(this);
         signUpTV.setOnClickListener(this);
         loginWithVoiceIV.setOnClickListener(this);
+        loginWithBiometric.setOnClickListener(this);
 
         biometric();
+        textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
+            if (i != TextToSpeech.ERROR) {
+                textToSpeech.setLanguage(Locale.UK);
+                String email = "welcome to login activity if you are already registered then scan your finger otherwise" +
+                        "you will login via voice and using keyboard";
+                textToSpeech.speak(email, TextToSpeech.QUEUE_ADD, null);
 
+                Handler handler = new Handler();
+                handler.postDelayed(this::loginWithBiometric, 2000);
+            }
+        });
+
+
+    }
+
+    private void loginWithBiometric() {
+        biometricPrompt.authenticate(promptInfo);
     }
 
     private void loginWithVoice() {
@@ -165,17 +188,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 handler.postDelayed(this::confirmLoginDetails, 2000);
             }
         }
-        if (requestCode ==3){
-            if (resultCode == RESULT_OK && null != data){
+        if (requestCode == 3) {
+            if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 loginByVoice.setText(result.get(0));
             }
-            if (loginByVoice.getText().toString().equals("yes")){
+            if (loginByVoice.getText().toString().equals("yes")) {
                 login();
             }
-            if (loginByVoice.getText().toString().equals("no")){
+            if (loginByVoice.getText().toString().equals("no")) {
                 String clearData = "we are clear your all provided data please try again";
-                textToSpeech.speak(clearData,TextToSpeech.QUEUE_ADD,null);
+                textToSpeech.speak(clearData, TextToSpeech.QUEUE_ADD, null);
                 emailET.setText("");
                 passwordET.setText("");
             }
@@ -184,22 +207,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void confirmLoginDetails() {
         String confirm = "please confirm your provided details";
-        textToSpeech.speak(confirm,TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(confirm, TextToSpeech.QUEUE_ADD, null);
         String email = "your email is";
-        textToSpeech.speak(email,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(emailET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(email, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(emailET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
         String password = "your password is";
-        textToSpeech.speak(password,TextToSpeech.QUEUE_ADD,null);
-        textToSpeech.speak(passwordET.getText().toString(),TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(password, TextToSpeech.QUEUE_ADD, null);
+        textToSpeech.speak(passwordET.getText().toString(), TextToSpeech.QUEUE_ADD, null);
 
 
         String ask = "if you want to login please say yes or don't want to login say no";
-        textToSpeech.speak(ask,TextToSpeech.QUEUE_ADD,null);
+        textToSpeech.speak(ask, TextToSpeech.QUEUE_ADD, null);
 
         Handler handler = new Handler();
         handler.postDelayed(this::openMic3, 18000);
     }
-
 
 
     private void biometric() {
@@ -249,14 +271,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String password = sharedPreferences.getString("password", "data not found");
 
                 performAuth(email, password);
+                String pass = "Authentication succeeded";
+                textToSpeech.speak(pass, TextToSpeech.QUEUE_ADD, null);
                 Toast.makeText(getApplicationContext(),
-                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                        pass, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed",
+                String failed = "Authentication failed";
+                textToSpeech.speak(failed, TextToSpeech.QUEUE_ADD, null);
+                Toast.makeText(getApplicationContext(), failed,
                                 Toast.LENGTH_SHORT)
                         .show();
             }
@@ -268,13 +294,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .setNegativeButtonText("Use account password")
                 .build();
 
-        // Prompt appears when user clicks "Log in".
-        // Consider integrating with the keystore to unlock cryptographic operations,
-        // if needed by your app.
-        ImageView biometricLoginButton = findViewById(R.id.biometric_login);
-        biometricLoginButton.setOnClickListener(view -> {
-            biometricPrompt.authenticate(promptInfo);
-        });
     }
 
     private void performAuth(String email, String password) {
@@ -314,6 +333,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.voice_login:
                 loginWithVoice();
                 break;
+
+            case R.id.biometric_login:
+                biometricPrompt.authenticate(promptInfo);
+                break;
         }
     }
 
@@ -332,7 +355,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             progressDialog.setMessage("Logging...");
             progressDialog.setCancelable(false);
             progressDialog.setTitle("Login");
-
 
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
